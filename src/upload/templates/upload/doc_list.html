@@ -1,0 +1,72 @@
+<style>
+    table {
+        width: 100%;
+    }
+    table td {
+        text-align: center;
+        border-bottom: 1px solid black;
+    }
+</style>
+
+{% if user.is_authenticated %}
+
+<p> Welcome {{user.username}} <p>
+
+<a href='{% url "upload:doc.add" %}'>Add Document</a>
+
+<hr />
+
+{% if object_list %}
+    <table>
+        {% for obj in object_list %}
+            <tr>
+                <td>
+                    <a href='{{ obj.get_absolute_url }}'>{{ obj.pk }}</a>
+                </td>
+                <td>
+                    <a href='{{ obj.get_absolute_url }}'>{{ obj }}</a>
+                </td>
+                <!--<td>
+                    {% if obj.picture %}
+                        <a href='{% url "db_file_storage.download_file" %}?name={{ obj.picture }}'>
+                            <i>Download File</i>
+                        </a>
+                    {% endif %}
+                </td> -->
+                <!--<td>
+                    {% if obj.pages %}
+                        <a href='{% url "db_file_storage.download_file" %}?name={{ obj.pages }}'>
+                            <i>Download pages</i>
+                        </a>
+                    {% endif %}
+                </td>
+            -->
+                <td>
+                    {% if obj.picture %}
+                        <a href='{% url "db_file_storage.get_file" %}?name={{ obj.picture }}' target='_blank'>
+                            <img height=64 width=64 src="{% url 'db_file_storage.get_file' %}?name={{ obj.picture }}" />
+                        </a>
+                        <br/>
+                        <a href='{% url "db_file_storage.download_file" %}?name={{ obj.picture }}'>
+                            <i>Download</i>
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No items found.</p>
+{% endif %}
+<hr/>
+<div align='center'>
+    <a href="{% url 'home' %}">Home</a>
+</div>
+
+
+{% else %}
+<p> You are not logged in</p>
+<p> Please login first </p>
+<a href="{% url 'login' %}">Login</a>
+
+{% endif %}

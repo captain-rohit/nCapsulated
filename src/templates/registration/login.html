@@ -1,0 +1,26 @@
+<!-- templates/registration/login.html -->
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<p> You are already logged in as {{user.username}}</p>
+<a href="{% url 'home' %}">Go to Home</a>
+<p> If you are not {{user.username}},then <a href="{% url 'logout' %}">logout</a></p>
+
+<h2>Want to Register</h2>
+<a href="{% url 'signup' %}">Signup</a>
+{% else %}
+<p> You are not logged in</p>
+<h2>Login</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Login</button>
+</form>
+
+<h2>Want to Register</h2>
+<a href="{% url 'signup' %}">Signup</a>
+{% endif %}
+{% endblock %}
