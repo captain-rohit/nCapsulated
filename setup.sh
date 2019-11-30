@@ -1,8 +1,8 @@
 # var="sudo apt-get update"
 # eval $var
 
-# var="sudo apt-get install python"
-# eval $var
+var="pip install --user virtualenv"
+eval $var
 
 var="python -m venv ."
 eval $var
