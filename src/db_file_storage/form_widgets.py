@@ -13,7 +13,30 @@ else:  # python3
 
 def db_file_widget(cls):
     """Edit the download-link inner text."""
+    def get_link_display(url):
+        unquoted = unquote(url.split('%2F')[-1])
+        if sys.version_info.major == 2:  # python 2
+            from django.utils.encoding import force_unicode
+            unquoted = force_unicode(unquoted)
+        return escape(unquoted)
 
+    def get_template_substitution_values(self, value):
+        # Used by Django < 1.11
+        subst = super(cls, self).get_template_substitution_values(value)
+        subst['initial'] = get_link_display(value.url)
+        return subst
+    setattr(cls,
+            'get_template_substitution_values',
+            get_template_substitution_values)
+
+    def get_context(self, name, value, attrs):
+        context = super(cls, self).get_context(name, value, attrs)
+        if value and hasattr(value, 'url'):
+            context['widget']['display'] = get_link_display(value.url)
+        return context
+    setattr(cls, 'get_context', get_context)
+
+    return cls
 
 @db_file_widget
 class DBClearableFileInput(ClearableFileInput):
